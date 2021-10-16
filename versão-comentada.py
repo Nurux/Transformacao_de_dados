@@ -85,6 +85,9 @@ if os.path.isfile('./Teste_Intuitive_Care{John_Santos_Felix_de_Santana}.zip'):
     print('Arquivo encontrado, verifique a pasta raiz. \nSkipando download...')
 
 else:
+    #Caso arquivo não exista, inicia o download
+    print('Iniciando download')
+    
     #Defini o a variavel pdf com a url do arquivo 
     pdf = 'https://www.gov.br/ans/pt-br/arquivos/assuntos/prestadores/padrao-para-troca-de-informacao-de-saude-suplementar-tiss/padrao-tiss/padrao_tiss_componente_organizacional_202108.pdf'
 
