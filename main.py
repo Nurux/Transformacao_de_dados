@@ -52,12 +52,20 @@ def zip():
     os.remove('tabela3.csv')
 
 
-pdf = 'https://www.gov.br/ans/pt-br/arquivos/assuntos/prestadores/padrao-para-troca-de-informacao-de-saude-suplementar-tiss/padrao-tiss/padrao_tiss_componente_organizacional_202108.pdf'
+print('Pesquisando arquivo...\n')
 
-l = tabula.read_pdf(pdf, pages='108-114',multiple_tables=True ,guess=True)
+if os.path.isfile('./Teste_Intuitive_Care{John_Santos_Felix_de_Santana}.zip'):
+    print('Arquivo encontrado, verifique a pasta raiz. \nSkipando download...')
+    
+else: 
+    print('Iniciando o download...')
+    
+    pdf = 'https://www.gov.br/ans/pt-br/arquivos/assuntos/prestadores/padrao-para-troca-de-informacao-de-saude-suplementar-tiss/padrao-tiss/padrao_tiss_componente_organizacional_202108.pdf'
 
-tb1 = tab1(l)
-tb2 = tab2(l)
-tb3 = tab3(l)
+    l = tabula.read_pdf(pdf, pages='108-114',multiple_tables=True ,guess=True)
 
-zp = zip()
+    tb1 = tab1(l)
+    tb2 = tab2(l)
+    tb3 = tab3(l)
+
+    zp = zip()
