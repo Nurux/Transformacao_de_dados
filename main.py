@@ -1,47 +1,56 @@
+'''
+Obs: Há um jeito bem mais facil de fazer esse mesmo projeto usando a lib Camelot, porém achei meio inviavel já
+que para utiliza-la o usuario deve baixar dois programas a parte e ainda importar a lib aqui no terminal.
+Projeto feito com as libs Tabula, Pandas, Numpy, Zipfile e Os
+Obs2: se quiser as três tabelas em unico csv, então só sera necessário importar a lib tabula
+Ex só com tabula: 
+    import tabula
+    url_pdf = 'https://www.gov.br/ans/pt-br/arquivos/assuntos/prestadores/padrao-para-troca-de-informacao-de-saude-suplementar-tiss/padrao-tiss/padrao_tiss_componente_organizacional_202108.pdf'
+    tabula.io.convert_into(url_pdf, 'tabelas.csv', 'csv', pages='108-114')
+Como não queria as 3 tabelas juntas optei por adicionar outras libs.
+Abra o terminal e digite:
+    pip install tabula
+    pip install pandas
+    pip install numpy
+    pip install zipfile
+    pip install os
+Se estiver em ambiente Linux:
+    pip3 install tabula  
+    pip3 install pandas
+    pip3 install numpy
+    pip3 install zipfile
+    pip3 install os  
+'''
+
+from typing import List
 import tabula 
 import pandas as pd
 import numpy as np
 from zipfile import *
 import os
 
-def tab1(l):
+def gera_tabela1(l):
     tabela1 = l[0]
     df = pd.DataFrame(tabela1)
     df.to_csv('tabela1.csv', index=False)
 
-def tab2(l):
+def gera_tabela2(l):
     tabela2 = l[1:7]
-    cont = 0
-    lista1 = ''
 
-    for lista in tabela2:
-        cont = cont + 1
-        if(cont < 1):
-            lista1 = lista
-        elif(cont < 2):
-            lista2 = lista
-        elif(cont < 3):
-            lista3 = lista
-        elif(cont < 4):
-           lista4 = lista
-        elif(cont < 5):
-           lista5 = lista
-        elif(cont < 6):
-           lista6 = lista
-        elif(cont < 7):
-            lista7 = lista
-
-    ld = np.array(dtype=object,object=[lista1,lista2,lista3,lista4,lista5,lista6,lista7])     
+    ld = np.array(dtype=list, object=[tabela2])
     df = pd.DataFrame(ld)
     df.to_csv('tabela2.csv')
 
-def tab3(l):
+
+def gera_tabela3(l):
+   
     tabela3 = l[7]
 
     df = pd.DataFrame(tabela3)
     df.to_csv('tabela3.csv', index=False)
 
-def zip():
+def gera_zip():
+   
     with ZipFile('Teste_Intuitive_Care{John_Santos_Felix_de_Santana}.zip', 'w') as myzip:
         myzip.write('tabela1.csv')
         myzip.write('tabela2.csv')
@@ -52,20 +61,26 @@ def zip():
     os.remove('tabela3.csv')
 
 
-print('Pesquisando arquivo...\n')
+def main():    
+    print('Pesquisando arquivo...\n')
 
-if os.path.isfile('./Teste_Intuitive_Care{John_Santos_Felix_de_Santana}.zip'):
-    print('Arquivo encontrado, verifique a pasta raiz. \nSkipando download...')
-    
-else: 
-    print('Iniciando o download...')
-    
-    pdf = 'https://www.gov.br/ans/pt-br/arquivos/assuntos/prestadores/padrao-para-troca-de-informacao-de-saude-suplementar-tiss/padrao-tiss/padrao_tiss_componente_organizacional_202108.pdf'
+    if os.path.isfile('./Teste_Intuitive_Care{John_Santos_Felix_de_Santana}.zip'):
+        print('Arquivo encontrado, verifique a pasta raiz. \nSkipando download...')
 
-    l = tabula.read_pdf(pdf, pages='108-114',multiple_tables=True ,guess=True)
+    else:
+        print('Iniciando download')
 
-    tb1 = tab1(l)
-    tb2 = tab2(l)
-    tb3 = tab3(l)
+        pdf = 'https://www.gov.br/ans/pt-br/arquivos/assuntos/prestadores/padrao-para-troca-de-informacao-de-saude-suplementar-tiss/padrao-tiss/padrao_tiss_componente_organizacional_202108.pdf'
 
-    zp = zip()
+        l = tabula.read_pdf(pdf, pages='108-114', multiple_tables=True , guess=True)
+        
+        pd.set_option('display.max_colwidth', None)
+        gera_tabela1(l)
+        gera_tabela2(l)
+        gera_tabela3(l)
+
+        gera_zip()
+        
+
+if __name__ == '__main__':
+    main()
