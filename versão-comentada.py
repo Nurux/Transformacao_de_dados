@@ -38,16 +38,13 @@ import numpy as np
 from zipfile import *
 import os
 
-#Define opção maxima de display como nula, para evitar truncamento de dados 
-pd.set_option('display.max_colwidth', None)
-
-def tab1(l):
+def gera_tabela1(l):
     #Pega a variavel l como parametro e busca o primeiro elemento da lista, depois transforma a lista em um DataFrame e converte para um arquivo csv e retira a indexação
     tabela1 = l[0]
     df = pd.DataFrame(tabela1)
     df.to_csv('tabela1.csv', index=False)
 
-def tab2(l):
+def gera_tabela2(l):
     #Pega a variavel l como parametro e busca do 2° até o 8° elemento da lista, (lembrando que o inicio da lista tem indicie 0 portanto o numero 1 e referente ao 2° elemento)
     tabela2 = l[1:7]
 
@@ -57,7 +54,7 @@ def tab2(l):
     df.to_csv('tabela2.csv')
 
 
-def tab3(l):
+def gera_tabela3(l):
     #Pega a variavel l como parametro e adiciona a variavel tabela o conteudo do indicie 7 da lista ou o 8° elemento (nesse caso ele só vai pegar a ultima tabela da pagina no caso a do quadro 32)
     tabela3 = l[7]
 
@@ -65,7 +62,7 @@ def tab3(l):
     df = pd.DataFrame(tabela3)
     df.to_csv('tabela3.csv', index=False)
 
-def zip():
+def gera_zip():
     #Por fim pega todos os arquivos csv na pasta raiz e compacta eles em zip, logo em seguida apaga os 3 arquivos csv da pasta 
     with ZipFile('Teste_Intuitive_Care{John_Santos_Felix_de_Santana}.zip', 'w') as myzip:
         myzip.write('tabela1.csv')
@@ -77,27 +74,32 @@ def zip():
     os.remove('tabela3.csv')
 
 
-#Inicio do programa
-print('Pesquisando arquivo...\n')
-
-if os.path.isfile('./Teste_Intuitive_Care{John_Santos_Felix_de_Santana}.zip'):
-    #Caso o arquivo exista o programa informa ao usuário e fecha
-    print('Arquivo encontrado, verifique a pasta raiz. \nSkipando download...')
-
-else:
-    #Caso arquivo não exista, inicia o download
-    print('Iniciando download')
+def main():    
+    print('Pesquisando arquivo...\n')
     
-    #Defini o a variavel pdf com a url do arquivo 
-    pdf = 'https://www.gov.br/ans/pt-br/arquivos/assuntos/prestadores/padrao-para-troca-de-informacao-de-saude-suplementar-tiss/padrao-tiss/padrao_tiss_componente_organizacional_202108.pdf'
+    #Verifica se o arquivo já existe na pasta atual
+    if os.path.isfile('./Teste_Intuitive_Care{John_Santos_Felix_de_Santana}.zip'):
+        print('Arquivo encontrado, verifique a pasta raiz. \nSkipando download...')
 
-    #Usei o tabula para ler somente as paginas que continham os quadros 30, 31 e 32 e atribui o resultado a variavel l que ficou como um tipo lista, já que o tabula retorna este tipo.
-    l = tabula.read_pdf(pdf, pages='108-114', multiple_tables=True , guess=True)
+    else:
+        print('Iniciando download')
 
-    #Chamei as funções em sequencia
-    tb1 = tab1(l)
-    tb2 = tab2(l)
-    tb3 = tab3(l)
+        pdf = 'https://www.gov.br/ans/pt-br/arquivos/assuntos/prestadores/padrao-para-troca-de-informacao-de-saude-suplementar-tiss/padrao-tiss/padrao_tiss_componente_organizacional_202108.pdf'
+        
+        #Busca as tabelas no pdf
+        l = tabula.read_pdf(pdf, pages='108-114', multiple_tables=True , guess=True)
+        
+        #Define opção maxima de display como nula, para evitar truncamento de dados 
+        pd.set_option('display.max_colwidth', None)
+        
+        #gera as tabelas em csv
+        gera_tabela1(l)
+        gera_tabela2(l)
+        gera_tabela3(l)
+        
+        #gera o zip com as 3 tabelas separadas
+        gera_zip()
+        
 
-    #Chamei função de geral zip 
-    zp = zip()
+if __name__ == '__main__':
+    main()
