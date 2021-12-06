@@ -3,6 +3,8 @@ Um código que fiz para um desafio de estágio.
 
 Ele extrai tabelas de um pdf da ANSS(Agência Nacional de Saude Suplementar), transforma as tabelas em formato csv e salva em um arquivo zip.
 
+Criado utilizando as libs: tabula, pandas, numpy, zipfile e os
+
 ## Como usar🤔?
 
 Baixe o arquivo entre no seu terminal e digite :
